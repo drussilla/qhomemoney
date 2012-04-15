@@ -11,6 +11,9 @@ TransactionDialog::TransactionDialog(Account* acc,QList<Account*>* accs, QWidget
 
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->pushButtonAdd, SIGNAL(clicked()), this, SLOT(AddTransaction()));
+
+    setInitState();
+    fillAccounts();
 }
 
 TransactionDialog::~TransactionDialog()
@@ -30,7 +33,6 @@ void TransactionDialog::AccountChanged()
 
 void TransactionDialog::setInitState()
 {
-    ui->lineEditDate->setText(QDate::currentDate().toString("MM.dd.yyyy"));
 
 }
 
@@ -46,5 +48,7 @@ void TransactionDialog::fillAccounts()
         {
 
         }
+
+        i++;
     }
 }
