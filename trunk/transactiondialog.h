@@ -4,6 +4,8 @@
 #include <QDialog>
 #include "account.h"
 #include <QDateTime>
+#include <QButtonGroup>
+#include <QComboBox>
 
 namespace Ui {
 class TransactionDialog;
@@ -25,9 +27,20 @@ private:
     Ui::TransactionDialog *ui;
     Account *account;
     QList<Account*>* accounts;
+    QButtonGroup* buttonGroup;
 
     void setInitState();
     void fillAccounts();
+    void setAllInvisible();
+    void changeCurrency(QComboBox *control, int index);
+
+
+private slots:
+    void outcomeChecked(bool);
+    void incomeChecked(bool);
+    void exchangeChecked(bool);
+    void fromChanged(int);
+    void toChanged(int);
 };
 
 #endif // TRANSACTIONDIALOG_H

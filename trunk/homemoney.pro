@@ -40,8 +40,7 @@ HEADERS  += mainwindow.h \
     transactiondialog.h
 
 FORMS    += mainwindow.ui \
-    transactiondialog.ui \
-    mainwindow.ui
+    transactiondialog.ui
 
 RESOURCES += \
     res.qrc

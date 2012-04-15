@@ -157,7 +157,7 @@ void MainWindow::AddTransaction(bool checked)
             Account* acc = ((CustomAction*)trayIconMenu->actions().at(i))->GetAccount();
             trayIconMenu->actions().at(i)->setChecked(false);
             TransactionDialog *dialog = new TransactionDialog(acc, accounts);
-            //dialog->show();
+            dialog->show();
         }
     }
 }
