@@ -4,7 +4,7 @@ CategoryListParser::CategoryListParser(QString inputSource) : XmlParser(inputSou
 {
 }
 
-QDomNode CategoryListParser::getThirdLevenNode(QString nodeName)
+QDomNode CategoryListParser::getThirdLevenNode(QString nodeName) throw(const char*, QString)
 {
     QDomElement root = doc->documentElement();
     if (root.tagName() != "result")

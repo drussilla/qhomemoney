@@ -111,7 +111,7 @@ QList<Account*>* ConnectionManager::GetAccountList(bool refresh) throw (const ch
     }
 }
 
-QList<Category *> *ConnectionManager::GetCategoryList(bool refresh)
+QList<Category *> *ConnectionManager::GetCategoryList(bool refresh) throw(const char*, QString)
 {
     if (categoryList != NULL && refresh)
     {
