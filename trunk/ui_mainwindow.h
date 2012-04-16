@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon 16. Apr 15:14:43 2012
+** Created: Mon 16. Apr 15:18:53 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -43,6 +43,7 @@ public:
     QLabel *label_2;
     QLineEdit *lineEditPassword;
     QLabel *errorLabel;
+    QLabel *label_3;
     QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout_3;
     QSpacerItem *horizontalSpacer;
@@ -53,7 +54,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(400, 300);
+        MainWindow->resize(400, 179);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -121,6 +122,11 @@ public:
 
         verticalLayout_3->addWidget(errorLabel);
 
+        label_3 = new QLabel(groupBox);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+
+        verticalLayout_3->addWidget(label_3);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer);
@@ -165,6 +171,7 @@ public:
         label->setText(QApplication::translate("MainWindow", "\320\233\320\276\320\263\320\270\320\275: ", 0, QApplication::UnicodeUTF8));
         label_2->setText(QApplication::translate("MainWindow", "\320\237\320\260\321\200\320\276\320\273\321\214:", 0, QApplication::UnicodeUTF8));
         errorLabel->setText(QApplication::translate("MainWindow", "Error Message", 0, QApplication::UnicodeUTF8));
+        label_3->setText(QApplication::translate("MainWindow", "Version: 0.0.1", 0, QApplication::UnicodeUTF8));
         pushButtonOk->setText(QApplication::translate("MainWindow", "OK", 0, QApplication::UnicodeUTF8));
         pushButtonCancel->setText(QApplication::translate("MainWindow", "Cancel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
