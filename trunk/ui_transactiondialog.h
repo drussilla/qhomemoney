@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'transactiondialog.ui'
 **
-** Created: Mon 16. Apr 11:57:35 2012
+** Created: Mon 16. Apr 15:14:43 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -69,6 +69,9 @@ public:
         sizePolicy.setHeightForWidth(TransactionDialog->sizePolicy().hasHeightForWidth());
         TransactionDialog->setSizePolicy(sizePolicy);
         TransactionDialog->setMaximumSize(QSize(16777215, 316));
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        TransactionDialog->setWindowIcon(icon);
         verticalLayout = new QVBoxLayout(TransactionDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -231,7 +234,7 @@ public:
 
     void retranslateUi(QDialog *TransactionDialog)
     {
-        TransactionDialog->setWindowTitle(QApplication::translate("TransactionDialog", "Dialog", 0, QApplication::UnicodeUTF8));
+        TransactionDialog->setWindowTitle(QApplication::translate("TransactionDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\276\320\277\320\265\321\200\320\260\321\206\320\270\321\216", 0, QApplication::UnicodeUTF8));
         pushButtonOutcome->setText(QApplication::translate("TransactionDialog", "\320\240\320\260\321\201\321\205\320\276\320\264", 0, QApplication::UnicodeUTF8));
         pushButtonExchange->setText(QApplication::translate("TransactionDialog", "\320\237\320\265\321\200\320\265\320\262\320\276\320\264", 0, QApplication::UnicodeUTF8));
         pushButtonIncome->setText(QApplication::translate("TransactionDialog", "\320\224\320\276\321\205\320\276\320\264", 0, QApplication::UnicodeUTF8));

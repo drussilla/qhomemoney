@@ -9,7 +9,7 @@ ConnectionManager::ConnectionManager(QString login, QString password, QObject *p
     accountListCS = "[domain]/iPhone/api14.asmx/AccountList?UserName=[login]&AppKey=[appKey]&UserKey=[password]";
     balanceListCS = "[domain]/iPhone/api14.asmx/BalanceList?UserName=[login]&AppKey=[appKey]&UserKey=[password]";
     categoryListCS = "[domain]/iPhone/api14.asmx/CategoryList?UserName=[login]&AppKey=[appKey]&UserKey=[password]";
-    transactionSaveCS = "[domain]/iPhone/api14.asmx/TransactionSave?UserName=[login]&AppKey=[appKey]&UserKey=[password]&AccountId=[accountId]&Factor=[factor]&isTrans=[isTrans]&Total=[total]&CurencyId=[curencyId]&CategoryId=[categotyId]&Date=[date]&Description=[description]&TransAccountId=[transAccountId]&TransTotal=[transTotal]&TransCurencyId=[transCurencyId]&isPlan=[isPlan]&GUID=[guid]";
+    transactionSaveCS = "[domain]/iPhone/api14.asmx/TransactionSave?UserName=[login]&AppKey=[appKey]&UserKey=[password]&AccountId=[accountId]&Factor=[factor]&isTrans=[isTrans]&Total=[total]&CurencyId=[curencyId]&CategoryId=[categoryId]&Date=[date]&Description=[description]&TransAccountId=[transAccountId]&TransTotal=[transTotal]&TransCurencyId=[transCurencyId]&isPlan=[isPlan]&GUID=[guid]";
 
     netManager = new QNetworkAccessManager(this);
 
@@ -151,6 +151,70 @@ QList<Category *> *ConnectionManager::GetCategoryList(bool refresh)
     {
         throw message;
     }
+}
+
+// factor = -1 - outcome;
+// factor = 1 - income;
+bool ConnectionManager::AddOutcomeOrIncome(int factor, int accountId, float total, int curencyId, int categoryId, QString date, QString description, bool isPlan)
+{
+    QNetworkRequest request(QUrl(getTransactionSaveCS(
+                                     accountId,
+                                     factor,
+                                     false,
+                                     total,
+                                     curencyId,
+                                     categoryId,
+                                     date,
+                                     description,
+                                     0,
+                                     0,
+                                     0,
+                                     isPlan,
+                                     QUuid::createUuid().toString())));
+
+    QNetworkReply *reply = netManager->get(request);
+
+    QEventLoop eventLoop;
+    connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
+
+    QString replyStr = QString::fromUtf8(reply->readAll());
+
+    delete reply;
+
+    // TODO: add error handling.
+    return replyStr.contains("<result><error>0</error></result>");
+}
+
+bool ConnectionManager::AddExchange(int accountIdFrom, float totalFrom, int curencyIdFrom, int accountIdTo, float totalTo, int curencyIdTo, QString date, QString description, bool isPlan)
+{
+    QNetworkRequest request(QUrl(getTransactionSaveCS(
+                                     accountIdFrom,
+                                     -1, // can be anything.
+                                     true,
+                                     totalFrom,
+                                     curencyIdFrom,
+                                     1, // can be anything.
+                                     date,
+                                     description,
+                                     accountIdTo,
+                                     totalTo,
+                                     curencyIdTo,
+                                     isPlan,
+                                     QUuid::createUuid().toString())));
+
+    QNetworkReply *reply = netManager->get(request);
+
+    QEventLoop eventLoop;
+    connect(reply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
+
+    QString replyStr = QString::fromUtf8(reply->readAll());
+
+    delete reply;
+
+    // TODO: add error handling.
+    return replyStr.contains("<result><error>0</error></result>");
 }
 
 QString ConnectionManager::GetLastError()

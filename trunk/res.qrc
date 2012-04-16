@@ -4,5 +4,6 @@
         <file>Button-Add-icon.png</file>
         <file>Button-Delete-icon.png</file>
         <file>Button-Refresh-icon.png</file>
+        <file>favicon.ico</file>
     </qresource>
 </RCC>

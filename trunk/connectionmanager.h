@@ -17,6 +17,7 @@
 #include "account.h"
 #include "group.h"
 #include "category.h"
+#include <QUuid>
 
 
 class ConnectionManager : public QObject
@@ -38,6 +39,25 @@ public:
     void ChangeCredentials(QString newLogin, QString newPass);
     QList<Account*>* GetAccountList(bool refresh = false) throw(const char*, QString);
     QList<Category*>* GetCategoryList(bool refresh = false) throw(const char*, QString);
+    bool AddOutcomeOrIncome(
+         int factor,
+         int accountId,
+         float total,
+         int curencyId,
+         int categoryId,
+         QString date,
+         QString description,
+         bool isPlan = false);
+    bool AddExchange(
+            int accountIdFrom,
+            float totalFrom,
+            int curencyIdFrom,
+            int accountIdTo,
+            float totalTo,
+            int curencyIdTo,
+            QString date,
+            QString description,
+            bool isPlan = false);
     QString GetLastError();
 
 private:

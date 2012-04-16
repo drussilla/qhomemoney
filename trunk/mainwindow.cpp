@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     config = new ConfigManager();
+    accountActions = new QList<CustomAction*>();
 
     connect(ui->pushButtonOk, SIGNAL(clicked()), this, SLOT(SaveSettings()));
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this , SLOT(CancelSettings()));
@@ -22,10 +23,17 @@ MainWindow::MainWindow(QWidget *parent) :
     createDefaultSysTray();
 
     manager = new ConnectionManager(config->getLogin(), config->getPassword());
+
+    RefreshTray();
+
+}
+
+void MainWindow::RefreshTray()
+{
     if (manager->CheckConnection())
     {
-        accounts = manager->GetAccountList();
-        categories = manager->GetCategoryList();
+        accounts = manager->GetAccountList(true);
+        categories = manager->GetCategoryList(true);
         displayAccounts();
     }
     else
@@ -34,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->errorLabel->setText(manager->GetLastError());
         ui->errorLabel->show();
     }
-
 }
 
 MainWindow::~MainWindow()
@@ -44,10 +51,13 @@ MainWindow::~MainWindow()
     delete accounts;
     //delete groups;
     delete config;
+    delete accountActions;
 }
 
 void MainWindow::displayAccounts()
 {
+    deleteAccountsFromTray();
+
     QList<Account*>::iterator i = accounts->begin();
     int position = 0;
     while (i != accounts->end())
@@ -71,9 +81,9 @@ void MainWindow::displayAccounts()
             }
             QString content = acc->getName() + ": " + currencyStr;
             CustomAction* action = new CustomAction(content, this, acc);
-
-            connect(action, SIGNAL(triggered(bool)), this, SLOT(AddTransaction(bool)));
-            trayIconMenu->insertAction(trayIconMenu->actions().at(position), action);//addAction(action);
+            accountActions->append(action);
+            connect(action, SIGNAL(triggered(bool)), this, SLOT(AddTransaction()));
+            trayIconMenu->insertAction(trayIconMenu->actions().at(position), action);
             position++;
         }
 
@@ -114,7 +124,7 @@ void MainWindow::createDefaultSysTray()
     trayIconMenu->addAction(exitAction);
 
     trayIcon = new QSystemTrayIcon(this);
-    QIcon icon(":/icon.png");
+    QIcon icon(":/favicon.ico");
     trayIcon->setIcon(icon);
     trayIcon->setContextMenu(trayIconMenu);
 
@@ -149,7 +159,7 @@ void MainWindow::CancelSettings()
     this->hide();
 }
 
-void MainWindow::AddTransaction(bool checked)
+void MainWindow::AddTransaction()
 {
     for (int i = 0; i < trayIconMenu->actions().count(); i++)
     {
@@ -157,8 +167,28 @@ void MainWindow::AddTransaction(bool checked)
         {
             Account* acc = ((CustomAction*)trayIconMenu->actions().at(i))->GetAccount();
             trayIconMenu->actions().at(i)->setChecked(false);
-            TransactionDialog *dialog = new TransactionDialog(acc, accounts, categories);
+            TransactionDialog *dialog = new TransactionDialog(
+                        acc,
+                        accounts,
+                        categories,
+                        manager);
+            connect(dialog, SIGNAL(refreshTray()), this, SLOT(RefreshTray()));
+
             dialog->show();
         }
     }
+}
+
+void MainWindow::deleteAccountsFromTray()
+{
+    QList<CustomAction*>::iterator i = accountActions->begin();
+
+    while (i != accountActions->end())
+    {
+        CustomAction* ca = (*i);
+        trayIconMenu->removeAction(ca);
+        i++;
+    }
+
+    accountActions->clear();
 }

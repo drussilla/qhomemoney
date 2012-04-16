@@ -30,12 +30,14 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
     ~MainWindow();
 
 public slots:
     void SaveSettings();
     void CancelSettings();
-    void AddTransaction(bool);
+    void AddTransaction();
+    void RefreshTray();
 
 private:
     Ui::MainWindow *ui;
@@ -46,8 +48,11 @@ private:
     QList<Group*>* groups;
     QList<Category*>* categories;
 
+    QList<CustomAction*>* accountActions;
+
     QString getResult(QString reply);
 
+    void deleteAccountsFromTray();
     void displayAccounts();
     void createDefaultSysTray();
 

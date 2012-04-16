@@ -1,14 +1,23 @@
 #include "transactiondialog.h"
 #include "ui_transactiondialog.h"
 
-TransactionDialog::TransactionDialog(Account* acc,QList<Account*>* accs, QList<Category*>* cats, QWidget *parent) :
+TransactionDialog::TransactionDialog(
+        Account* acc,
+        QList<Account*>* accs,
+        QList<Category*>* cats,
+        ConnectionManager* manager,
+        QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TransactionDialog)
 {
     ui->setupUi(this);
+
+    WRONGCOLOR = "#FF3D64";
+
     account = acc;
     accounts = accs;
     categories = cats;
+    this->manager = manager;
 
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->pushButtonAdd, SIGNAL(clicked()), this, SLOT(AddTransaction()));
@@ -28,7 +37,6 @@ TransactionDialog::TransactionDialog(Account* acc,QList<Account*>* accs, QList<C
 
     fillAccounts();
     setInitState();
-
 }
 
 TransactionDialog::~TransactionDialog()
@@ -39,18 +47,19 @@ TransactionDialog::~TransactionDialog()
 
 void TransactionDialog::AddTransaction()
 {
-
-}
-
-void TransactionDialog::AccountChanged()
-{
-
+    if (addTransaction())
+    {
+        emit refreshTray();
+    }
 }
 
 void TransactionDialog::AddTransactionAndClose()
 {
-    AddTransaction();
-    this->close();
+    if (addTransaction())
+    {
+        emit refreshTray();
+        this->close();
+    }
 }
 
 void TransactionDialog::setInitState()
@@ -114,7 +123,7 @@ void TransactionDialog::changeCurrency(QComboBox *control, int index)
         Currency *cur = (*i);
         if (cur->isDisplay())
         {
-            control->addItem(cur->getShortName());
+            control->addItem(cur->getShortName(), cur->getId());
         }
 
         i++;
@@ -137,6 +146,140 @@ void TransactionDialog::changeCategory(int factor)
 
         i++;
     }
+}
+
+void TransactionDialog::addOutcome()
+{
+    int accountId = ui->comboBoxAccountFrom->itemData(ui->comboBoxAccountFrom->currentIndex()).toInt();
+    int curencyId = ui->comboBoxCurencyFrom->itemData(ui->comboBoxCurencyFrom->currentIndex()).toInt();
+    int categoryId = ui->comboBoxCategory->itemData(ui->comboBoxCategory->currentIndex()).toInt();
+
+    float total = ui->lineEditTotalFrom->text().toFloat();
+
+    QString date = ui->dateEdit->date().toString("MM.dd.yyyy");
+    QString description = ui->lineEditDescription->text();
+
+    manager->AddOutcomeOrIncome(
+                -1,
+                accountId,
+                total,
+                curencyId,
+                categoryId,
+                date,
+                description);
+}
+
+void TransactionDialog::addIncome()
+{
+    int accountId = ui->comboBoxAccountTo->itemData(ui->comboBoxAccountTo->currentIndex()).toInt();
+    int curencyId = ui->comboBoxCurencyTo->itemData(ui->comboBoxCurencyTo->currentIndex()).toInt();
+    int categoryId = ui->comboBoxCategory->itemData(ui->comboBoxCategory->currentIndex()).toInt();
+
+    float total = ui->lineEditTotalTo->text().toFloat();
+
+    QString date = ui->dateEdit->date().toString("MM.dd.yyyy");
+    QString description = ui->lineEditDescription->text();
+
+    manager->AddOutcomeOrIncome(
+                1,
+                accountId,
+                total,
+                curencyId,
+                categoryId,
+                date,
+                description);
+}
+
+void TransactionDialog::addExchange()
+{
+    int accountIdFrom = ui->comboBoxAccountFrom->itemData(ui->comboBoxAccountFrom->currentIndex()).toInt();
+    int curencyIdFrom = ui->comboBoxCurencyFrom->itemData(ui->comboBoxCurencyFrom->currentIndex()).toInt();
+    int accountIdTo = ui->comboBoxAccountTo->itemData(ui->comboBoxAccountTo->currentIndex()).toInt();
+    int curencyITo = ui->comboBoxCurencyTo->itemData(ui->comboBoxCurencyTo->currentIndex()).toInt();
+
+    float totalFrom = ui->lineEditTotalFrom->text().toFloat();
+
+    float totalTo;
+    if (ui->lineEditTotalTo->text().isEmpty())
+    {
+        totalTo = totalFrom;
+    }
+    else
+    {
+        totalTo = ui->lineEditTotalTo->text().toFloat();
+    }
+
+
+    QString date = ui->dateEdit->date().toString("MM.dd.yyyy");
+    QString description = ui->lineEditDescription->text();
+
+    manager->AddExchange(
+                accountIdFrom,
+                totalFrom,
+                curencyIdFrom,
+                accountIdTo,
+                totalTo,
+                curencyITo,
+                date,
+                description);
+}
+
+bool TransactionDialog::addTransaction()
+{
+    if (ui->pushButtonOutcome->isChecked())
+    {
+        if (ui->lineEditTotalFrom->text().isEmpty())
+        {
+            ui->lineEditTotalFrom->setStyleSheet("background:" + WRONGCOLOR);
+            return false;
+        }
+        else
+        {
+            ui->lineEditTotalFrom->setStyleSheet("background: white;");
+            addOutcome();
+            ui->lineEditTotalFrom->setText("");
+            ui->lineEditDescription->setText("");
+            return true;
+        }
+    }
+
+    if (ui->pushButtonIncome->isChecked())
+    {
+        if (ui->lineEditTotalTo->text().isEmpty())
+        {
+            ui->lineEditTotalTo->setStyleSheet("background:" + WRONGCOLOR);
+            return false;
+        }
+        else
+        {
+            ui->lineEditTotalTo->setStyleSheet("background: white;");
+            addIncome();
+            ui->lineEditTotalTo->setText("");
+            ui->lineEditDescription->setText("");
+            return true;
+        }
+    }
+
+    if (ui->pushButtonExchange->isChecked())
+    {
+        if (ui->lineEditTotalFrom->text().isEmpty())
+        {
+            ui->lineEditTotalFrom->setStyleSheet("background:" + WRONGCOLOR);
+            return false;
+        }
+        else
+        {
+            addExchange();
+            ui->lineEditTotalFrom->setStyleSheet("background: white;");
+            ui->lineEditTotalTo->setStyleSheet("background: white;");
+            ui->lineEditTotalTo->setText("");
+            ui->lineEditTotalFrom->setText("");
+            ui->lineEditDescription->setText("");
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void TransactionDialog::outcomeChecked(bool state)
