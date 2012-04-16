@@ -124,7 +124,7 @@ void MainWindow::createDefaultSysTray()
     trayIconMenu->addAction(exitAction);
 
     trayIcon = new QSystemTrayIcon(this);
-    QIcon icon(":/favicon.ico");
+    QIcon icon(":/icon.png");
     trayIcon->setIcon(icon);
     trayIcon->setContextMenu(trayIconMenu);
 

@@ -9,6 +9,7 @@ QT       += core gui network xml
 TARGET = homemoney
 TEMPLATE = app
 
+RC_FILE = myapp.rc
 
 SOURCES += main.cpp\
         mainwindow.cpp \

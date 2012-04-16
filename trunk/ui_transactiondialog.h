@@ -1,8 +1,8 @@
 /********************************************************************************
 ** Form generated from reading UI file 'transactiondialog.ui'
 **
-** Created: Mon 16. Apr 15:14:43 2012
-**      by: Qt User Interface Compiler version 4.8.1
+** Created: Mon 16. Apr 16:56:19 2012
+**      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -70,7 +70,7 @@ public:
         TransactionDialog->setSizePolicy(sizePolicy);
         TransactionDialog->setMaximumSize(QSize(16777215, 316));
         QIcon icon;
-        icon.addFile(QString::fromUtf8(":/favicon.ico"), QSize(), QIcon::Normal, QIcon::Off);
+        icon.addFile(QString::fromUtf8(":/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         TransactionDialog->setWindowIcon(icon);
         verticalLayout = new QVBoxLayout(TransactionDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
