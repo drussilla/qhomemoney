@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     simplecrypt.cpp \
     connectionmanager.cpp \
     customaction.cpp \
-    transactiondialog.cpp
+    transactiondialog.cpp \
+    category.cpp \
+    categorylistparser.cpp
 
 HEADERS  += mainwindow.h \
     account.h \
@@ -37,7 +39,9 @@ HEADERS  += mainwindow.h \
     simplecrypt.h \
     connectionmanager.h \
     customaction.h \
-    transactiondialog.h
+    transactiondialog.h \
+    category.h \
+    categorylistparser.h
 
 FORMS    += mainwindow.ui \
     transactiondialog.ui

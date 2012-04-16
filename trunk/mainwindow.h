@@ -18,6 +18,7 @@
 #include "connectionmanager.h"
 #include "customaction.h"
 #include "transactiondialog.h"
+#include "category.h"
 
 namespace Ui {
     class MainWindow;
@@ -43,6 +44,7 @@ private:
 
     QList<Account*>* accounts;
     QList<Group*>* groups;
+    QList<Category*>* categories;
 
     QString getResult(QString reply);
 

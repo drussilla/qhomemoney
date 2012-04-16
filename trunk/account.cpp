@@ -22,9 +22,6 @@ Account::~Account()
     delete this->currencyList;
 }
 
-
-
-
 // #########################
 // Setter and Getter section
 // #########################
@@ -103,6 +100,12 @@ QList<Currency *> * Account::getCurrencyList()
     return this->currencyList;
 }
 
+QString Account::getCollectionName()
+{
+    return "accountcollection";
+}
+
+
 void Account::parseInitDom(const QDomElement &element)
 {
     QDomNode node = element.firstChild();
@@ -138,11 +141,6 @@ void Account::parseInitDom(const QDomElement &element)
         }
         node = node.nextSibling();
     }
-}
-
-QString Account::getCollectionName()
-{
-    return "accountcollection";
 }
 
 void Account::parseBalanceNode(QDomNode firstAccount) throw(const QString)

@@ -13,8 +13,10 @@
 #include <QEventLoop>
 #include "accountlistparser.h"
 #include "balancelistparser.h"
+#include "categorylistparser.h"
 #include "account.h"
 #include "group.h"
+#include "category.h"
 
 
 class ConnectionManager : public QObject
@@ -35,6 +37,7 @@ public:
     bool CheckConnection();
     void ChangeCredentials(QString newLogin, QString newPass);
     QList<Account*>* GetAccountList(bool refresh = false) throw(const char*, QString);
+    QList<Category*>* GetCategoryList(bool refresh = false) throw(const char*, QString);
     QString GetLastError();
 
 private:
@@ -53,6 +56,7 @@ private:
     QNetworkAccessManager *netManager;
 
     QList<Account*>* accountList;
+    QList<Category*>* categoryList;
     QList<Group*>* groupList;
 
     QString getCS(CSTypes type);

@@ -45,5 +45,11 @@ void BalanceListParser::parse(QList<Account *> *accountList) throw(const char*, 
     }
 }
 
+QDomNode BalanceListParser::getThirdLevenNode(QString nodeName)
+{
+    QDomNode node;
+    return node;
+}
+
 
 

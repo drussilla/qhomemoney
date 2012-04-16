@@ -36,9 +36,7 @@ public:
     virtual void parseInitDom(const QDomElement &element);
 
     void parseBalanceNode(QDomNode firstAccount) throw(const QString);
-
     static QString getCollectionName();
-
 private:
     unsigned int id;
     QString name;

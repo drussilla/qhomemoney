@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if (manager->CheckConnection())
     {
         accounts = manager->GetAccountList();
+        categories = manager->GetCategoryList();
         displayAccounts();
     }
     else
@@ -156,7 +157,7 @@ void MainWindow::AddTransaction(bool checked)
         {
             Account* acc = ((CustomAction*)trayIconMenu->actions().at(i))->GetAccount();
             trayIconMenu->actions().at(i)->setChecked(false);
-            TransactionDialog *dialog = new TransactionDialog(acc, accounts);
+            TransactionDialog *dialog = new TransactionDialog(acc, accounts, categories);
             dialog->show();
         }
     }

@@ -5,7 +5,6 @@ AccountListParser::AccountListParser(QString inputSource)
 {
 }
 
-
 QDomNode AccountListParser::getThirdLevenNode(QString nodeName) throw(const char*, QString)
 {
     QDomElement root = doc->documentElement();

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'transactiondialog.ui'
 **
-** Created: Mon 16. Apr 00:52:52 2012
+** Created: Mon 16. Apr 11:57:35 2012
 **      by: Qt User Interface Compiler version 4.8.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -175,6 +175,7 @@ public:
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
         comboBoxCategory = new QComboBox(groupBoxCategory);
         comboBoxCategory->setObjectName(QString::fromUtf8("comboBoxCategory"));
+        comboBoxCategory->setMaxVisibleItems(15);
 
         horizontalLayout_4->addWidget(comboBoxCategory);
 

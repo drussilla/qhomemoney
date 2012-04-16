@@ -1,16 +1,18 @@
 #include "transactiondialog.h"
 #include "ui_transactiondialog.h"
 
-TransactionDialog::TransactionDialog(Account* acc,QList<Account*>* accs, QWidget *parent) :
+TransactionDialog::TransactionDialog(Account* acc,QList<Account*>* accs, QList<Category*>* cats, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TransactionDialog)
 {
     ui->setupUi(this);
     account = acc;
     accounts = accs;
+    categories = cats;
 
     connect(ui->pushButtonCancel, SIGNAL(clicked()), this, SLOT(close()));
     connect(ui->pushButtonAdd, SIGNAL(clicked()), this, SLOT(AddTransaction()));
+    connect(ui->pushButtonAddClose, SIGNAL(clicked()), this, SLOT(AddTransactionAndClose()));
 
     buttonGroup = new QButtonGroup();
     buttonGroup->addButton(ui->pushButtonOutcome);
@@ -43,6 +45,12 @@ void TransactionDialog::AddTransaction()
 void TransactionDialog::AccountChanged()
 {
 
+}
+
+void TransactionDialog::AddTransactionAndClose()
+{
+    AddTransaction();
+    this->close();
 }
 
 void TransactionDialog::setInitState()
@@ -113,6 +121,24 @@ void TransactionDialog::changeCurrency(QComboBox *control, int index)
     }
 }
 
+void TransactionDialog::changeCategory(int factor)
+{
+    QList<Category*>::iterator i = categories->begin();
+
+    ui->comboBoxCategory->clear();
+
+    while (i != categories->end())
+    {
+        Category *cat = (*i);
+        if (cat->getFactor() == factor)
+        {
+            ui->comboBoxCategory->addItem(cat->getName(), cat->getId());
+        }
+
+        i++;
+    }
+}
+
 void TransactionDialog::outcomeChecked(bool state)
 {
     if (!state)
@@ -127,6 +153,8 @@ void TransactionDialog::outcomeChecked(bool state)
     ui->groupBoxDescription->setVisible(true);
 
     this->resize(this->width(), this->height() - ui->groupBoxTo->height());
+
+    changeCategory(-1);
 }
 
 void TransactionDialog::incomeChecked(bool state)
@@ -144,6 +172,7 @@ void TransactionDialog::incomeChecked(bool state)
 
     this->resize(this->width(), this->height() - ui->groupBoxFrom->height());
 
+    changeCategory(1);
 }
 
 void TransactionDialog::exchangeChecked(bool state)

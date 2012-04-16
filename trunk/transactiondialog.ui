@@ -182,7 +182,11 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_4">
       <item>
-       <widget class="QComboBox" name="comboBoxCategory"/>
+       <widget class="QComboBox" name="comboBoxCategory">
+        <property name="maxVisibleItems">
+         <number>15</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

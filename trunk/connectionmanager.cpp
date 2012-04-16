@@ -47,6 +47,7 @@ void ConnectionManager::ChangeCredentials(QString newLogin, QString newPass)
 
     accountList = NULL;
     groupList = NULL;
+    categoryList = NULL;
 }
 
 QList<Account*>* ConnectionManager::GetAccountList(bool refresh) throw (const char*, QString)
@@ -99,6 +100,48 @@ QList<Account*>* ConnectionManager::GetAccountList(bool refresh) throw (const ch
         balanceListParser.parse(accountList);
 
         return accountList;
+    }
+    catch (const char* message)
+    {
+        throw message;
+    }
+    catch (QString message)
+    {
+        throw message;
+    }
+}
+
+QList<Category *> *ConnectionManager::GetCategoryList(bool refresh)
+{
+    if (categoryList != NULL && refresh)
+    {
+       categoryList = NULL;
+    }
+    else if(categoryList != NULL && !refresh)
+    {
+        return categoryList;
+    }
+
+    QNetworkRequest request(QUrl(getCS(ConnectionManager::CategoryList)));
+    QNetworkReply *categoryListReply = netManager->get(request);
+
+    QEventLoop eventLoop;
+    connect(categoryListReply, SIGNAL(finished()), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
+
+    QString reply = QString::fromUtf8(categoryListReply->readAll());
+
+    delete categoryListReply;
+
+    QString result = getResult(reply);
+
+    try
+    {
+        CategoryListParser categoryListParser(result);
+
+        categoryList = categoryListParser.parse<Category>();
+
+        return categoryList;
     }
     catch (const char* message)
     {
